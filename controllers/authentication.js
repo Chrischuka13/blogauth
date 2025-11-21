@@ -32,8 +32,23 @@ const login = async (req, res) => {
     } catch (error) {
         // res.json({error})
         const errors = handleError(error)
-        res.status(400).json(errors)
+        res.status(404).json(errors)
     }
 }
 
-module.exports = {login, register}
+const logout = async (req, res) => {
+    try {
+        const {email} = req.body
+
+        const user = await User.findOne({email})
+        if (!user) {
+            return Error('user not found')
+        }
+        res.status(200).json({success: true, user})
+    } catch (error) {
+        const errors = handleError(error)
+        res.status(404).json(errors)
+    }
+}
+
+module.exports = {login, register, logout}
